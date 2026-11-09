@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('핫라인 관리', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <h1 class="page-title">핫라인 관리</h1>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>접수번호</th><th>유형</th><th>제목</th><th class="center">상태</th><th class="center">접수일</th></tr>
+            </thead>
+            <tbody>
+            <tr th:if="${page.empty}"><td colspan="5" class="empty">접수된 제보가 없습니다.</td></tr>
+            <tr th:each="h : ${page.content}">
+                <td><a th:href="@{/admin/hotlines/{id}(id=${h.id})}" th:text="${h.receiptNo}">번호</a></td>
+                <td th:text="${h.category}"></td>
+                <td th:text="${h.title}"></td>
+                <td class="center"><th:block th:replace="~{fragments/ui :: statusBadge(${h.status})}"></th:block></td>
+                <td class="center muted" th:text="${#temporals.format(h.createdAt, 'yyyy-MM-dd')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <th:block th:replace="~{fragments/ui :: pagination(${page}, '/admin/hotlines')}"></th:block>
+</th:block>
+</body>
+</html>

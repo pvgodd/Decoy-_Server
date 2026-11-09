@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('입점상담 신청', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 640px; margin: 0 auto;">
+        <h1 class="page-title">입점상담 신청</h1>
+        <p class="page-desc">입점·제휴 상담을 신청합니다. 담당자가 확인 후 연락드립니다.</p>
+
+        <div class="card">
+            <form th:action="@{/consult/apply}" th:object="${form}" method="post" novalidate>
+                <div class="grid grid-2">
+                    <div class="form-row">
+                        <label for="companyName" class="required">회사명</label>
+                        <input type="text" id="companyName" th:field="*{companyName}" class="input"
+                               th:classappend="${#fields.hasErrors('companyName')} ? 'input-invalid'">
+                        <div class="field-error" th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}"></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="bizNo" class="required">사업자등록번호</label>
+                        <input type="text" id="bizNo" th:field="*{bizNo}" class="input" placeholder="123-45-67890"
+                               th:classappend="${#fields.hasErrors('bizNo')} ? 'input-invalid'">
+                        <div class="field-error" th:if="${#fields.hasErrors('bizNo')}" th:errors="*{bizNo}"></div>
+                    </div>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-row">
+                        <label for="managerName" class="required">담당자명</label>
+                        <input type="text" id="managerName" th:field="*{managerName}" class="input"
+                               th:classappend="${#fields.hasErrors('managerName')} ? 'input-invalid'">
+                        <div class="field-error" th:if="${#fields.hasErrors('managerName')}" th:errors="*{managerName}"></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="phone" class="required">연락처</label>
+                        <input type="text" id="phone" th:field="*{phone}" class="input" placeholder="010-1234-5678"
+                               th:classappend="${#fields.hasErrors('phone')} ? 'input-invalid'">
+                        <div class="field-error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                    </div>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-row">
+                        <label for="email" class="required">이메일</label>
+                        <input type="email" id="email" th:field="*{email}" class="input"
+                               th:classappend="${#fields.hasErrors('email')} ? 'input-invalid'">
+                        <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="category" class="required">상담 분야</label>
+                        <select id="category" th:field="*{category}" class="input"
+                                th:classappend="${#fields.hasErrors('category')} ? 'input-invalid'">
+                            <option value="">선택하세요</option>
+                            <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
+                        </select>
+                        <div class="field-error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label for="homepage">홈페이지 <span class="muted">(선택)</span></label>
+                    <input type="text" id="homepage" th:field="*{homepage}" class="input" placeholder="https://">
+                </div>
+                <div class="form-row">
+                    <label for="content" class="required">상담 내용</label>
+                    <textarea id="content" th:field="*{content}" class="input" rows="7"
+                              th:classappend="${#fields.hasErrors('content')} ? 'input-invalid'"></textarea>
+                    <div class="field-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+                </div>
+                <div class="form-row">
+                    <label for="lookupPassword" class="required">조회 비밀번호</label>
+                    <input type="password" id="lookupPassword" th:field="*{lookupPassword}" class="input"
+                           th:classappend="${#fields.hasErrors('lookupPassword')} ? 'input-invalid'">
+                    <div class="hint">상담 현황 조회에 사용됩니다. 접수번호와 함께 보관하세요. (4~20자)</div>
+                    <div class="field-error" th:if="${#fields.hasErrors('lookupPassword')}" th:errors="*{lookupPassword}"></div>
+                </div>
+                <div class="form-row">
+                    <label class="checkbox-row">
+                        <input type="checkbox" th:field="*{agreePrivacy}">
+                        <span>[필수] 개인정보 수집·이용에 동의합니다.
+                            (<a th:href="@{/policy/privacy}" target="_blank">전문 보기</a>)</span>
+                    </label>
+                    <div class="field-error" th:if="${#fields.hasErrors('agreePrivacy')}" th:errors="*{agreePrivacy}"></div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-lg">상담 신청</button>
+                    <a th:href="@{/consult/status}" class="btn btn-ghost btn-lg">상담현황 조회</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

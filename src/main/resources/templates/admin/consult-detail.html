@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('입점상담 처리', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 720px; margin: 0 auto;">
+        <h1 class="page-title">입점상담 처리</h1>
+        <div class="card">
+            <dl class="dl">
+                <dt>접수번호</dt><dd th:text="${consult.receiptNo}"></dd>
+                <dt>회사명</dt><dd th:text="${consult.companyName}"></dd>
+                <dt>사업자번호</dt><dd th:text="${consult.bizNo}"></dd>
+                <dt>분야</dt><dd th:text="${consult.category}"></dd>
+                <dt>담당자</dt><dd th:text="${consult.managerName}"></dd>
+                <dt>이메일</dt><dd th:text="${consult.email}"></dd>
+                <dt>연락처</dt><dd th:text="${consult.phone}"></dd>
+                <dt>홈페이지</dt><dd th:text="${consult.homepage != null ? consult.homepage : '-'}"></dd>
+                <dt>신청일</dt><dd th:text="${#temporals.format(consult.createdAt, 'yyyy-MM-dd HH:mm')}"></dd>
+            </dl>
+            <h3 class="card-title mt-24">상담 내용</h3>
+            <div class="content-text" th:text="${consult.content}"></div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">처리</h3>
+            <form th:action="@{/admin/consults/{id}(id=${consult.id})}" th:object="${form}" method="post">
+                <div class="form-row">
+                    <label for="status" class="required">처리 상태</label>
+                    <select id="status" th:field="*{status}" class="input">
+                        <option th:each="s : ${T(com.partnerportal.domain.InquiryStatus).values()}"
+                                th:value="${s}" th:text="${s.label}"></option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="answer">답변</label>
+                    <textarea id="answer" th:field="*{answer}" class="input" rows="6"></textarea>
+                    <div class="hint">입력하면 신청자 조회 화면에 표시됩니다.</div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">저장</button>
+                    <a th:href="@{/admin/consults}" class="btn btn-ghost">목록으로</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

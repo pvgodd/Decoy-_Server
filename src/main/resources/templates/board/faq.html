@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('자주 묻는 질문', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <h1 class="page-title">자주 묻는 질문 (FAQ)</h1>
+    <p class="page-desc">궁금한 점을 분류별로 확인하세요.</p>
+
+    <div class="tabs">
+        <a th:href="@{/faq}" class="tab" th:classappend="${selected == null} ? 'active'">전체</a>
+        <a th:each="c : ${categories}" th:href="@{/faq(category=${c})}" class="tab"
+           th:classappend="${selected == c} ? 'active'" th:text="${c}"></a>
+    </div>
+
+    <div class="card">
+        <div th:if="${#lists.isEmpty(faqs)}" class="empty">등록된 FAQ가 없습니다.</div>
+        <details th:each="f : ${faqs}" style="border-bottom:1px solid var(--border); padding:14px 0;">
+            <summary style="cursor:pointer; font-weight:600; list-style:none;">
+                <span class="badge badge-gray" th:text="${f.category}">분류</span>
+                <span style="margin-left:8px;" th:text="${f.question}">질문</span>
+            </summary>
+            <div class="content-text mt-8 muted" style="padding-left:4px;" th:text="${f.answer}">답변</div>
+        </details>
+    </div>
+</th:block>
+</body>
+</html>

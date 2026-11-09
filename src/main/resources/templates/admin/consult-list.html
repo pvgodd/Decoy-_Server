@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('입점상담 관리', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <h1 class="page-title">입점상담 관리</h1>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>접수번호</th><th>회사명</th><th>분야</th><th>담당자</th><th class="center">상태</th><th class="center">신청일</th></tr>
+            </thead>
+            <tbody>
+            <tr th:if="${page.empty}"><td colspan="6" class="empty">접수된 상담이 없습니다.</td></tr>
+            <tr th:each="c : ${page.content}">
+                <td><a th:href="@{/admin/consults/{id}(id=${c.id})}" th:text="${c.receiptNo}">번호</a></td>
+                <td th:text="${c.companyName}"></td>
+                <td th:text="${c.category}"></td>
+                <td th:text="${c.managerName}"></td>
+                <td class="center"><th:block th:replace="~{fragments/ui :: statusBadge(${c.status})}"></th:block></td>
+                <td class="center muted" th:text="${#temporals.format(c.createdAt, 'yyyy-MM-dd')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <th:block th:replace="~{fragments/ui :: pagination(${page}, '/admin/consults')}"></th:block>
+</th:block>
+</body>
+</html>

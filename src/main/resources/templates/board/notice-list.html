@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('공지사항', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <h1 class="page-title">공지사항</h1>
+    <div class="toolbar">
+        <form class="search-form spacer" th:action="@{/notice/list}" method="get">
+            <input type="text" name="keyword" class="input" placeholder="제목 검색" th:value="${keyword}" style="width:220px;">
+            <button type="submit" class="btn btn-outline">검색</button>
+        </form>
+    </div>
+
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr>
+                <th style="width:70px;" class="center">구분</th>
+                <th>제목</th>
+                <th style="width:120px;" class="center">작성일</th>
+                <th style="width:80px;" class="center">조회</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${page.empty}"><td colspan="4" class="empty">등록된 공지사항이 없습니다.</td></tr>
+            <tr th:each="n : ${page.content}">
+                <td class="center">
+                    <span th:if="${n.pinned}" class="badge badge-blue">공지</span>
+                    <span th:unless="${n.pinned}" class="muted">-</span>
+                </td>
+                <td><a th:href="@{/notice/{id}(id=${n.id})}" th:text="${n.title}">제목</a></td>
+                <td class="center muted" th:text="${#temporals.format(n.createdAt, 'yyyy-MM-dd')}">날짜</td>
+                <td class="center muted" th:text="${n.viewCount}">0</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <th:block th:replace="~{fragments/ui :: pagination(${page}, '/notice/list')}"></th:block>
+</th:block>
+</body>
+</html>

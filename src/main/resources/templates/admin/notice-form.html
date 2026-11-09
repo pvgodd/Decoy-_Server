@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('공지 작성', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 720px; margin: 0 auto;">
+        <h1 class="page-title" th:text="${mode == 'edit'} ? '공지 수정' : '새 공지 작성'">공지</h1>
+        <div class="card">
+            <form th:action="@{/admin/notices}" th:object="${form}" method="post" novalidate>
+                <input type="hidden" name="id" th:value="${id}" th:if="${id != null}">
+                <div class="form-row">
+                    <label for="title" class="required">제목</label>
+                    <input type="text" id="title" th:field="*{title}" class="input"
+                           th:classappend="${#fields.hasErrors('title')} ? 'input-invalid'">
+                    <div class="field-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                </div>
+                <div class="form-row">
+                    <label for="content" class="required">내용</label>
+                    <textarea id="content" th:field="*{content}" class="input" rows="12"
+                              th:classappend="${#fields.hasErrors('content')} ? 'input-invalid'"></textarea>
+                    <div class="field-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+                </div>
+                <div class="form-row">
+                    <label class="checkbox-row"><input type="checkbox" th:field="*{pinned}"> 상단 고정</label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">저장</button>
+                    <a th:href="@{/admin/notices}" class="btn btn-ghost">취소</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,24 @@
+[Unit]
+Description=Partner Portal (Spring Boot)
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=portal
+Group=portal
+WorkingDirectory=/opt/partner-portal
+# 환경변수 파일 (.env.example 참고). 권한 600 권장.
+EnvironmentFile=/opt/partner-portal/.env
+ExecStart=/usr/bin/java -jar /opt/partner-portal/partner-portal.jar
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=5
+# 보안 강화
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

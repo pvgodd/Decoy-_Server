@@ -1,0 +1,49 @@
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        http-only: true
+        same-site: lax
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: partner-portal
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/partner_portal}
+    username: ${DB_USERNAME:portal}
+    password: ${DB_PASSWORD:portal}
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+  thymeleaf:
+    cache: ${THYMELEAF_CACHE:true}
+  # 메일 발송(비밀번호 초기화 링크)은 환경변수 SPRING_MAIL_HOST / SPRING_MAIL_PORT /
+  # SPRING_MAIL_USERNAME / SPRING_MAIL_PASSWORD 를 설정하면 켜집니다.
+  # 설정하지 않으면 초기화 링크는 서버 로그에만 기록됩니다.
+  mail:
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+app:
+  brand: ${APP_BRAND:파트너 포털}
+  company: ${APP_COMPANY:우리회사}
+  base-url: ${APP_BASE_URL:http://localhost:8080}
+  mail-from: ${MAIL_FROM:no-reply@example.com}
+  # 최초 기동 시 관리자 계정이 없으면 생성합니다. 비밀번호를 비워두면 랜덤 생성 후 로그에 1회 출력합니다.
+  admin:
+    login-id: ${ADMIN_LOGIN_ID:admin}
+    password: ${ADMIN_PASSWORD:}
+  security:
+    max-login-failures: 5
+
+logging:
+  level:
+    com.partnerportal: INFO

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('핫라인 처리', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 720px; margin: 0 auto;">
+        <h1 class="page-title">핫라인 처리</h1>
+        <div class="card">
+            <dl class="dl">
+                <dt>접수번호</dt><dd th:text="${hotline.receiptNo}"></dd>
+                <dt>유형</dt><dd th:text="${hotline.category}"></dd>
+                <dt>제목</dt><dd th:text="${hotline.title}"></dd>
+                <dt>제보자</dt><dd th:text="${hotline.reporterName != null ? hotline.reporterName : '익명'}"></dd>
+                <dt>연락처</dt><dd th:text="${hotline.contact != null ? hotline.contact : '-'}"></dd>
+                <dt>접수일</dt><dd th:text="${#temporals.format(hotline.createdAt, 'yyyy-MM-dd HH:mm')}"></dd>
+            </dl>
+            <h3 class="card-title mt-24">내용</h3>
+            <div class="content-text" th:text="${hotline.content}"></div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">처리</h3>
+            <form th:action="@{/admin/hotlines/{id}(id=${hotline.id})}" th:object="${form}" method="post">
+                <div class="form-row">
+                    <label for="status" class="required">처리 상태</label>
+                    <select id="status" th:field="*{status}" class="input">
+                        <option th:each="s : ${T(com.partnerportal.domain.InquiryStatus).values()}"
+                                th:value="${s}" th:text="${s.label}"></option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="answer">처리 결과 / 답변</label>
+                    <textarea id="answer" th:field="*{answer}" class="input" rows="6"></textarea>
+                    <div class="hint">입력하면 제보자 조회 화면에 표시됩니다.</div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">저장</button>
+                    <a th:href="@{/admin/hotlines}" class="btn btn-ghost">목록으로</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

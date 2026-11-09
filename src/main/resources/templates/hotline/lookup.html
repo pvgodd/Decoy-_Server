@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('핫라인 제보 조회', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 480px; margin: 0 auto;">
+        <h1 class="page-title">핫라인 제보 조회</h1>
+        <p class="page-desc">접수번호와 조회 비밀번호를 입력하세요.</p>
+        <div class="card">
+            <div th:if="${#fields.hasGlobalErrors('form')}" class="alert alert-error">
+                <div th:each="err : ${#fields.globalErrors('form')}" th:text="${err}"></div>
+            </div>
+            <form th:action="@{/hotline/list}" th:object="${form}" method="post" novalidate>
+                <div class="form-row">
+                    <label for="receiptNo" class="required">접수번호</label>
+                    <input type="text" id="receiptNo" th:field="*{receiptNo}" class="input" placeholder="H20261109123456">
+                    <div class="field-error" th:if="${#fields.hasErrors('receiptNo')}" th:errors="*{receiptNo}"></div>
+                </div>
+                <div class="form-row">
+                    <label for="lookupPassword" class="required">조회 비밀번호</label>
+                    <input type="password" id="lookupPassword" th:field="*{lookupPassword}" class="input">
+                    <div class="field-error" th:if="${#fields.hasErrors('lookupPassword')}" th:errors="*{lookupPassword}"></div>
+                </div>
+                <button type="submit" class="btn btn-block btn-lg">조회</button>
+            </form>
+        </div>
+        <p class="text-center mt-16"><a th:href="@{/hotline/register}">새 제보 등록</a></p>
+    </div>
+</th:block>
+</body>
+</html>

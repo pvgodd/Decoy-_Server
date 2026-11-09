@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('회원 관리', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <h1 class="page-title">회원 관리</h1>
+
+    <div class="tabs">
+        <a th:href="@{/admin/members}" class="tab" th:classappend="${selected == null} ? 'active'">전체</a>
+        <a th:each="s : ${statuses}" th:href="@{/admin/members(status=${s})}" class="tab"
+           th:classappend="${selected == s} ? 'active'" th:text="${s.label}"></a>
+    </div>
+
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>회사명</th><th>아이디</th><th>담당자</th><th>이메일</th>
+                <th class="center">상태</th><th class="center" style="width:280px;">처리</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${page.empty}"><td colspan="6" class="empty">해당하는 회원이 없습니다.</td></tr>
+            <tr th:each="m : ${page.content}">
+                <td th:text="${m.companyName}"></td>
+                <td th:text="${m.loginId}"></td>
+                <td th:text="${m.managerName}"></td>
+                <td class="muted" th:text="${m.email}"></td>
+                <td class="center">
+                    <th:block th:replace="~{fragments/ui :: memberStatusBadge(${m.status})}"></th:block>
+                </td>
+                <td class="center">
+                    <th:block th:unless="${m.role.name() == 'ADMIN'}">
+                        <form th:action="@{/admin/members/{id}/status(id=${m.id})}" method="post" class="inline-form">
+                            <input type="hidden" name="status" value="ACTIVE">
+                            <button class="btn btn-sm" th:if="${m.status.name() != 'ACTIVE'}">승인</button>
+                        </form>
+                        <form th:action="@{/admin/members/{id}/status(id=${m.id})}" method="post" class="inline-form">
+                            <input type="hidden" name="status" value="REJECTED">
+                            <button class="btn btn-sm btn-ghost" th:if="${m.status.name() == 'PENDING'}">반려</button>
+                        </form>
+                        <form th:action="@{/admin/members/{id}/status(id=${m.id})}" method="post" class="inline-form"
+                              data-confirm="이 회원을 잠금 처리할까요?">
+                            <input type="hidden" name="status" value="LOCKED">
+                            <button class="btn btn-sm btn-danger" th:if="${m.status.name() == 'ACTIVE'}">잠금</button>
+                        </form>
+                    </th:block>
+                    <span th:if="${m.role.name() == 'ADMIN'}" class="muted">관리자</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <th:block th:replace="~{fragments/ui :: pagination(${page}, '/admin/members')}"></th:block>
+    <script th:src="@{/js/app.js}"></script>
+</th:block>
+</body>
+</html>

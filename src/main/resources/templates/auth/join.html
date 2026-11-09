@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('회원가입', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 640px; margin: 0 auto;">
+        <h1 class="page-title">회원가입</h1>
+        <p class="page-desc">협력사 담당자 정보를 입력해 주세요. 가입 신청 후 관리자 승인이 완료되면 로그인할 수 있습니다.</p>
+
+        <div class="card">
+            <div th:if="${#fields.hasGlobalErrors('form')}" class="alert alert-error">
+                <div th:each="err : ${#fields.globalErrors('form')}" th:text="${err}"></div>
+            </div>
+
+            <form th:action="@{/member/join}" th:object="${form}" method="post" novalidate>
+                <div class="form-row">
+                    <label for="loginId" class="required">아이디</label>
+                    <div class="input-group">
+                        <input type="text" id="loginId" th:field="*{loginId}" class="input"
+                               th:classappend="${#fields.hasErrors('loginId')} ? 'input-invalid'"
+                               autocomplete="username">
+                        <button type="button" class="btn btn-outline" data-check-id="/member/check-id">중복 확인</button>
+                    </div>
+                    <div id="loginId-check" class="hint">영문 소문자·숫자·밑줄 4~20자</div>
+                    <div class="field-error" th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}"></div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="form-row">
+                        <label for="password" class="required">비밀번호</label>
+                        <div class="pw-field">
+                            <input type="password" id="password" th:field="*{password}" class="input"
+                                   th:classappend="${#fields.hasErrors('password')} ? 'input-invalid'"
+                                   autocomplete="new-password">
+                            <button type="button" class="pw-toggle" data-toggle="password">표시</button>
+                        </div>
+                        <div class="hint">영문·숫자·특수문자 포함 8~64자</div>
+                        <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="passwordConfirm" class="required">비밀번호 확인</label>
+                        <input type="password" id="passwordConfirm" th:field="*{passwordConfirm}" class="input"
+                               th:classappend="${#fields.hasErrors('passwordConfirm')} ? 'input-invalid'"
+                               autocomplete="new-password">
+                        <div class="field-error" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="form-row">
+                        <label for="companyName" class="required">회사명</label>
+                        <input type="text" id="companyName" th:field="*{companyName}" class="input"
+                               th:classappend="${#fields.hasErrors('companyName')} ? 'input-invalid'">
+                        <div class="field-error" th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}"></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="bizNo" class="required">사업자등록번호</label>
+                        <input type="text" id="bizNo" th:field="*{bizNo}" class="input" placeholder="123-45-67890"
+                               th:classappend="${#fields.hasErrors('bizNo')} ? 'input-invalid'">
+                        <div class="field-error" th:if="${#fields.hasErrors('bizNo')}" th:errors="*{bizNo}"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="form-row">
+                        <label for="managerName" class="required">담당자명</label>
+                        <input type="text" id="managerName" th:field="*{managerName}" class="input"
+                               th:classappend="${#fields.hasErrors('managerName')} ? 'input-invalid'">
+                        <div class="field-error" th:if="${#fields.hasErrors('managerName')}" th:errors="*{managerName}"></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="phone" class="required">연락처</label>
+                        <input type="text" id="phone" th:field="*{phone}" class="input" placeholder="010-1234-5678"
+                               th:classappend="${#fields.hasErrors('phone')} ? 'input-invalid'">
+                        <div class="field-error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label for="email" class="required">이메일</label>
+                    <input type="email" id="email" th:field="*{email}" class="input"
+                           th:classappend="${#fields.hasErrors('email')} ? 'input-invalid'"
+                           autocomplete="email">
+                    <div class="hint">아이디 찾기·비밀번호 초기화에 사용됩니다.</div>
+                    <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                </div>
+
+                <div class="form-row">
+                    <label class="checkbox-row">
+                        <input type="checkbox" th:field="*{agreePrivacy}">
+                        <span>[필수] 개인정보 수집·이용에 동의합니다.
+                            (<a th:href="@{/policy/privacy}" target="_blank">전문 보기</a>)</span>
+                    </label>
+                    <div class="field-error" th:if="${#fields.hasErrors('agreePrivacy')}" th:errors="*{agreePrivacy}"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-lg">가입 신청</button>
+                    <a th:href="@{/login}" class="btn btn-ghost btn-lg">취소</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script th:src="@{/js/app.js}"></script>
+</th:block>
+</body>
+</html>

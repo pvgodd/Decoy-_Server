@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('내 정보', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 640px; margin: 0 auto;">
+        <h1 class="page-title">내 정보</h1>
+
+        <div class="card">
+            <h3 class="card-title">담당자 정보</h3>
+            <dl class="dl">
+                <dt>아이디</dt><dd th:text="${member.loginId}"></dd>
+                <dt>회사명</dt><dd th:text="${member.companyName}"></dd>
+                <dt>사업자등록번호</dt><dd th:text="${member.bizNo}"></dd>
+                <dt>담당자명</dt><dd th:text="${member.managerName}"></dd>
+                <dt>이메일</dt><dd th:text="${member.email}"></dd>
+                <dt>연락처</dt><dd th:text="${member.phone}"></dd>
+                <dt>최근 로그인</dt>
+                <dd th:text="${member.lastLoginAt != null ? #temporals.format(member.lastLoginAt, 'yyyy-MM-dd HH:mm') : '-'}"></dd>
+            </dl>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">비밀번호 변경</h3>
+            <div th:if="${#fields.hasGlobalErrors('form')}" class="alert alert-error">
+                <div th:each="err : ${#fields.globalErrors('form')}" th:text="${err}"></div>
+            </div>
+            <form th:action="@{/mypage/password}" th:object="${form}" method="post" novalidate>
+                <div class="form-row">
+                    <label for="currentPassword" class="required">현재 비밀번호</label>
+                    <input type="password" id="currentPassword" th:field="*{currentPassword}" class="input"
+                           th:classappend="${#fields.hasErrors('currentPassword')} ? 'input-invalid'">
+                    <div class="field-error" th:if="${#fields.hasErrors('currentPassword')}" th:errors="*{currentPassword}"></div>
+                </div>
+                <div class="form-row">
+                    <label for="newPassword" class="required">새 비밀번호</label>
+                    <input type="password" id="newPassword" th:field="*{newPassword}" class="input"
+                           th:classappend="${#fields.hasErrors('newPassword')} ? 'input-invalid'">
+                    <div class="hint">영문·숫자·특수문자 포함 8~64자</div>
+                    <div class="field-error" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}"></div>
+                </div>
+                <div class="form-row">
+                    <label for="newPasswordConfirm" class="required">새 비밀번호 확인</label>
+                    <input type="password" id="newPasswordConfirm" th:field="*{newPasswordConfirm}" class="input"
+                           th:classappend="${#fields.hasErrors('newPasswordConfirm')} ? 'input-invalid'">
+                    <div class="field-error" th:if="${#fields.hasErrors('newPasswordConfirm')}" th:errors="*{newPasswordConfirm}"></div>
+                </div>
+                <button type="submit" class="btn">비밀번호 변경</button>
+            </form>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

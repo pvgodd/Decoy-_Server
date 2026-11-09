@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('핫라인 제보 등록', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 640px; margin: 0 auto;">
+        <h1 class="page-title">핫라인 제보 등록</h1>
+        <p class="page-desc">불공정거래·윤리 위반 등을 제보합니다. 이름과 연락처를 비워두면 익명으로 접수됩니다.</p>
+
+        <div class="card">
+            <form th:action="@{/hotline/register}" th:object="${form}" method="post" novalidate>
+                <div class="form-row">
+                    <label for="category" class="required">제보 유형</label>
+                    <select id="category" th:field="*{category}" class="input"
+                            th:classappend="${#fields.hasErrors('category')} ? 'input-invalid'">
+                        <option value="">선택하세요</option>
+                        <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
+                    </select>
+                    <div class="field-error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+                </div>
+                <div class="form-row">
+                    <label for="title" class="required">제목</label>
+                    <input type="text" id="title" th:field="*{title}" class="input"
+                           th:classappend="${#fields.hasErrors('title')} ? 'input-invalid'">
+                    <div class="field-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                </div>
+                <div class="form-row">
+                    <label for="content" class="required">내용</label>
+                    <textarea id="content" th:field="*{content}" class="input" rows="8"
+                              th:classappend="${#fields.hasErrors('content')} ? 'input-invalid'"></textarea>
+                    <div class="field-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="form-row">
+                        <label for="reporterName">이름 <span class="muted">(선택)</span></label>
+                        <input type="text" id="reporterName" th:field="*{reporterName}" class="input">
+                    </div>
+                    <div class="form-row">
+                        <label for="contact">연락처·이메일 <span class="muted">(선택)</span></label>
+                        <input type="text" id="contact" th:field="*{contact}" class="input">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label for="lookupPassword" class="required">조회 비밀번호</label>
+                    <input type="password" id="lookupPassword" th:field="*{lookupPassword}" class="input"
+                           th:classappend="${#fields.hasErrors('lookupPassword')} ? 'input-invalid'">
+                    <div class="hint">처리 결과 조회에 사용됩니다. 접수번호와 함께 보관하세요. (4~20자)</div>
+                    <div class="field-error" th:if="${#fields.hasErrors('lookupPassword')}" th:errors="*{lookupPassword}"></div>
+                </div>
+
+                <div class="form-row">
+                    <label class="checkbox-row">
+                        <input type="checkbox" th:field="*{agreePrivacy}">
+                        <span>[필수] 개인정보 수집·이용에 동의합니다.
+                            (<a th:href="@{/policy/privacy}" target="_blank">전문 보기</a>)</span>
+                    </label>
+                    <div class="field-error" th:if="${#fields.hasErrors('agreePrivacy')}" th:errors="*{agreePrivacy}"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-lg">제보 접수</button>
+                    <a th:href="@{/hotline/list}" class="btn btn-ghost btn-lg">제보 조회</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

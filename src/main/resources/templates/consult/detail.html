@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('상담 현황 상세', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 680px; margin: 0 auto;">
+        <h1 class="page-title">상담 현황</h1>
+        <div class="card">
+            <dl class="dl">
+                <dt>접수번호</dt><dd th:text="${consult.receiptNo}"></dd>
+                <dt>처리상태</dt>
+                <dd><th:block th:replace="~{fragments/ui :: statusBadge(${consult.status})}"></th:block></dd>
+                <dt>회사명</dt><dd th:text="${consult.companyName}"></dd>
+                <dt>상담 분야</dt><dd th:text="${consult.category}"></dd>
+                <dt>담당자</dt><dd th:text="${consult.managerName}"></dd>
+                <dt>신청일</dt><dd th:text="${#temporals.format(consult.createdAt, 'yyyy-MM-dd HH:mm')}"></dd>
+            </dl>
+            <h3 class="card-title mt-24">상담 내용</h3>
+            <div class="content-text" th:text="${consult.content}"></div>
+
+            <div th:if="${consult.answer}" class="mt-24">
+                <h3 class="card-title">답변</h3>
+                <div class="alert alert-info content-text" th:text="${consult.answer}"></div>
+                <p class="muted" style="font-size:13px;" th:if="${consult.answeredAt}"
+                   th:text="|답변일: ${#temporals.format(consult.answeredAt, 'yyyy-MM-dd HH:mm')}|"></p>
+            </div>
+        </div>
+        <div class="form-actions"><a th:href="@{/consult/status}" class="btn btn-ghost">목록으로</a></div>
+    </div>
+</th:block>
+</body>
+</html>

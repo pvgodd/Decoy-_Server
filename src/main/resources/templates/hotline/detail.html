@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('핫라인 제보 상세', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 680px; margin: 0 auto;">
+        <h1 class="page-title">핫라인 제보 상세</h1>
+        <div class="card">
+            <dl class="dl">
+                <dt>접수번호</dt><dd th:text="${hotline.receiptNo}"></dd>
+                <dt>처리상태</dt>
+                <dd><th:block th:replace="~{fragments/ui :: statusBadge(${hotline.status})}"></th:block></dd>
+                <dt>제보 유형</dt><dd th:text="${hotline.category}"></dd>
+                <dt>제목</dt><dd th:text="${hotline.title}"></dd>
+                <dt>접수일</dt><dd th:text="${#temporals.format(hotline.createdAt, 'yyyy-MM-dd HH:mm')}"></dd>
+            </dl>
+            <h3 class="card-title mt-24">내용</h3>
+            <div class="content-text" th:text="${hotline.content}"></div>
+
+            <div th:if="${hotline.answer}" class="mt-24">
+                <h3 class="card-title">처리 결과</h3>
+                <div class="alert alert-info content-text" th:text="${hotline.answer}"></div>
+                <p class="muted" style="font-size:13px;"
+                   th:if="${hotline.answeredAt}"
+                   th:text="|답변일: ${#temporals.format(hotline.answeredAt, 'yyyy-MM-dd HH:mm')}|"></p>
+            </div>
+        </div>
+        <div class="form-actions"><a th:href="@{/hotline/list}" class="btn btn-ghost">목록으로</a></div>
+    </div>
+</th:block>
+</body>
+</html>

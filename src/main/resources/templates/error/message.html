@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('안내', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 520px; margin: 32px auto 0;">
+        <div class="card text-center">
+            <h1 class="page-title">안내</h1>
+            <p class="page-desc" style="margin-top:12px;" th:text="${message}">메시지</p>
+            <div class="form-actions" style="justify-content:center;">
+                <a th:href="@{/}" class="btn">처음으로</a>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

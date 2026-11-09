@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('아이디 찾기', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 480px; margin: 0 auto;">
+        <h1 class="page-title">아이디 찾기</h1>
+        <p class="page-desc">가입 시 등록한 회사명과 이메일로 아이디를 조회합니다.</p>
+
+        <div class="card">
+            <form th:action="@{/support/find-id}" th:object="${form}" method="post" novalidate>
+                <div class="form-row">
+                    <label for="companyName" class="required">회사명</label>
+                    <input type="text" id="companyName" th:field="*{companyName}" class="input"
+                           th:classappend="${#fields.hasErrors('companyName')} ? 'input-invalid'">
+                    <div class="field-error" th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}"></div>
+                </div>
+                <div class="form-row">
+                    <label for="email" class="required">이메일</label>
+                    <input type="email" id="email" th:field="*{email}" class="input"
+                           th:classappend="${#fields.hasErrors('email')} ? 'input-invalid'">
+                    <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                </div>
+                <button type="submit" class="btn btn-block btn-lg">아이디 찾기</button>
+            </form>
+
+            <div th:if="${searched}" class="mt-24">
+                <div th:if="${#lists.isEmpty(loginIds)}" class="alert alert-error">
+                    일치하는 가입 정보가 없습니다. 입력하신 회사명과 이메일을 다시 확인해 주세요.
+                </div>
+                <div th:unless="${#lists.isEmpty(loginIds)}" class="alert alert-success">
+                    <div>조회된 아이디</div>
+                    <ul style="margin: 8px 0 0; padding-left: 18px;">
+                        <li th:each="id : ${loginIds}" th:text="${id}" style="font-weight:600;"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p class="text-center mt-16"><a th:href="@{/login}">로그인 화면으로</a></p>
+    </div>
+</th:block>
+</body>
+</html>

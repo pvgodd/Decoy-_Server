@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- 처리상태 배지 -->
+<span th:fragment="statusBadge(status)"
+      th:classappend="${status.name() == 'DONE'} ? 'badge-green' : (${status.name() == 'IN_PROGRESS'} ? 'badge-amber' : 'badge-gray')"
+      class="badge" th:text="${status.label}">상태</span>
+
+<!-- 회원상태 배지 -->
+<span th:fragment="memberStatusBadge(status)"
+      th:switch="${status.name()}" class="badge">
+    <span th:case="'ACTIVE'" class="badge badge-green" th:text="${status.label}">정상</span>
+    <span th:case="'PENDING'" class="badge badge-amber" th:text="${status.label}">승인대기</span>
+    <span th:case="'LOCKED'" class="badge badge-red" th:text="${status.label}">잠금</span>
+    <span th:case="'REJECTED'" class="badge badge-gray" th:text="${status.label}">반려</span>
+</span>
+
+<!-- 페이지네이션: page = Page 객체, baseUrl = 링크 기본 경로 -->
+<nav th:fragment="pagination(page, baseUrl)" class="pagination" th:if="${page.totalPages > 1}">
+    <a th:href="@{${baseUrl}(page=${page.number - 1})}" th:classappend="${page.first} ? 'disabled'">이전</a>
+    <th:block th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}">
+        <a th:if="${i != page.number}" th:href="@{${baseUrl}(page=${i})}" th:text="${i + 1}">1</a>
+        <span th:if="${i == page.number}" class="active" th:text="${i + 1}">1</span>
+    </th:block>
+    <a th:href="@{${baseUrl}(page=${page.number + 1})}" th:classappend="${page.last} ? 'disabled'">다음</a>
+</nav>
+</body>
+</html>

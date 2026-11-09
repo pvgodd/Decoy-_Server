@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(title, content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title th:text="|${title} · ${app.brand}|">파트너 포털</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" th:href="@{/}">
+            <span class="brand-mark">PP</span>
+            <span class="brand-text" th:text="${app.brand}">파트너 포털</span>
+        </a>
+        <nav class="gnb">
+            <a th:href="@{/notice/list}">공지사항</a>
+            <a th:href="@{/faq}">FAQ</a>
+            <a th:href="@{/consult/apply}">입점상담</a>
+            <a th:href="@{/hotline/register}">핫라인</a>
+        </nav>
+        <div class="header-actions">
+            <th:block sec:authorize="isAuthenticated()">
+                <a sec:authorize="hasRole('ADMIN')" class="btn btn-ghost btn-sm" th:href="@{/admin}">관리자</a>
+                <a class="btn btn-ghost btn-sm" th:href="@{/mypage}">내 정보</a>
+                <form th:action="@{/logout}" method="post" class="inline-form">
+                    <button type="submit" class="btn btn-ghost btn-sm">로그아웃</button>
+                </form>
+            </th:block>
+            <th:block sec:authorize="!isAuthenticated()">
+                <a class="btn btn-ghost btn-sm" th:href="@{/login}">로그인</a>
+            </th:block>
+        </div>
+    </div>
+</header>
+
+<main class="container main">
+    <div th:if="${infoMessage}" class="alert alert-info" th:text="${infoMessage}"></div>
+    <th:block th:replace="${content}">본문</th:block>
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <span th:text="|© ${app.company}|">© 회사</span>
+        <a th:href="@{/policy/privacy}">개인정보처리방침</a>
+    </div>
+</footer>
+</body>
+</html>

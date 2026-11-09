@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('FAQ 작성', ~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div style="max-width: 720px; margin: 0 auto;">
+        <h1 class="page-title" th:text="${mode == 'edit'} ? 'FAQ 수정' : '새 FAQ 작성'">FAQ</h1>
+        <div class="card">
+            <form th:action="@{/admin/faqs}" th:object="${form}" method="post" novalidate>
+                <input type="hidden" name="id" th:value="${id}" th:if="${id != null}">
+                <div class="grid grid-2">
+                    <div class="form-row">
+                        <label for="category" class="required">분류</label>
+                        <select id="category" th:field="*{category}" class="input"
+                                th:classappend="${#fields.hasErrors('category')} ? 'input-invalid'">
+                            <option value="">선택</option>
+                            <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
+                        </select>
+                        <div class="field-error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="sortOrder">정렬 순서</label>
+                        <input type="number" id="sortOrder" th:field="*{sortOrder}" class="input">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label for="question" class="required">질문</label>
+                    <input type="text" id="question" th:field="*{question}" class="input"
+                           th:classappend="${#fields.hasErrors('question')} ? 'input-invalid'">
+                    <div class="field-error" th:if="${#fields.hasErrors('question')}" th:errors="*{question}"></div>
+                </div>
+                <div class="form-row">
+                    <label for="answer" class="required">답변</label>
+                    <textarea id="answer" th:field="*{answer}" class="input" rows="8"
+                              th:classappend="${#fields.hasErrors('answer')} ? 'input-invalid'"></textarea>
+                    <div class="field-error" th:if="${#fields.hasErrors('answer')}" th:errors="*{answer}"></div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">저장</button>
+                    <a th:href="@{/admin/faqs}" class="btn btn-ghost">취소</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>
